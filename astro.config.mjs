@@ -24,6 +24,13 @@ export default defineConfig({
                       { label: 'Plugin Architecture: MONAI Deploy Info GW', slug: 'arch-patterns/monai-deploy-plugin-arch' },
                   ],
               },
+			  {
+                  label: '.NET Clean Architecture',
+                  collapsed: false,
+                  items: [
+                      { label: 'Clean Architecture System Design (Jason)', slug: 'clean-arch/cleanarchitecture-oop-systemdesign-jason' },
+                  ],
+              }, 
               {
                   label: 'Reference',
                   collapsed: false,
