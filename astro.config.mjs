@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
       starlight({
           title: 'Software Design Explore',
-          social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+          social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Lightbridge-KS/software-design-explore' }],
           sidebar: [
               {
                   label: 'OSS Examples',
