@@ -10,8 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^7.0.6",
     "@astrojs/starlight": "^0.38.2",
     "astro": "^6.0.1",
+    "astro-mermaid": "^2.0.1",
+    "mermaid": "^11.14.0",
     "sharp": "^0.34.2"
   }
 }
