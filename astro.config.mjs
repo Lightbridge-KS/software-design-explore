@@ -15,6 +15,7 @@ export default defineConfig({
                   collapsed: false,
                   items: [
                       { label: 'MONAI Deploy Informatics Gateway', slug: 'oss/monai-deploy-info-gw-system' },
+                      { label: 'Pi', slug: 'oss/pi-mono-oop-uml-architecture' }
                   ],
               },
               {
