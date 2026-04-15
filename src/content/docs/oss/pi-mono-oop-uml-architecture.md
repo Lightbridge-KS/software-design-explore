@@ -218,6 +218,52 @@ classDiagram
     Context *-- Message
 ```
 
+Breif Diagram
+
+```
+Architecture Overview (from diagram):
+
+  Registry ◇--stores--> ApiProvider<TApi, TOptions>
+                             |
+                 +-----------+-----------+
+                 |                       |
+            consumes                consumes
+                 |                       |
+          Model<TApi>              Context ◆--> Message (union)
+                                   
+  ApiProvider --returns--> AssistantMessageEventStream
+                                   |
+                              extends
+                                   |
+                           EventStream<T, R>
+```
+
+How the component fits:
+
+```
+                        main()
+                          |
+           1. registerApiProvider(anthropicProvider)
+                          |
+                      Registry
+                     /providers/
+                          |
+           2. resolveApiProvider("anthropic")
+                          |
+                    ApiProvider
+                     .stream()
+                       |   |
+                 Model<>  Context{ messages, tools }
+                       |
+            AssistantMessageEventStream
+                       |
+          +------------+-------------+
+          |                          |
+   for await (event)          await .result()
+   (text-delta, done)        → AssistantMessage
+
+```
+
 ### Why function-based polymorphism?
 
 An abstract `Provider` base class would have forced every provider to share a lifecycle (`constructor`, `dispose`, etc.) and a single inheritance root. In practice, providers differ wildly: Anthropic streams typed events, OpenAI Chat Completions streams SSE chunks, Bedrock requires AWS SigV4 signing. By making the *unit of polymorphism* a function pair rather than a class, each provider module is free to organise its internals however it wants — and adding a new provider is a single call to `registerApiProvider()` (see `providers/register-builtins.ts:345`) with no class hierarchy to slot into.
