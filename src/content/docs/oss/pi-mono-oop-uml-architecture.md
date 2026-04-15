@@ -1241,11 +1241,11 @@ classDiagram
         -steeringQueue: PendingMessageQueue
         -followUpQueue: PendingMessageQueue
         +streamFn: StreamFn
-        +convertToLlm: (AgentMessage[]) Message[]
-        +transformContext?: (AgentMessage[]) Promise~AgentMessage[]~
-        +beforeToolCall?: BeforeToolCallHook
-        +afterToolCall?: AfterToolCallHook
-        +prompt(m, images?) Promise~void~
+        +convertToLlm: ConvertFn
+        +transformContext: TransformFn
+        +beforeToolCall: BeforeToolCallHook
+        +afterToolCall: AfterToolCallHook
+        +prompt(m, images) Promise~void~
         +continue() Promise~void~
         +subscribe(listener) Unsubscribe
         +steer(m) void
@@ -1253,31 +1253,31 @@ classDiagram
         +abort() void
         +waitForIdle() Promise~void~
         +reset() void
-        +state: AgentState
+        +state() AgentState
     }
 
     class AgentState {
         <<interface>>
         +systemPrompt: string
-        +model: Model~any~
+        +model: Model
         +thinkingLevel: string
         +tools: AgentTool[]
         +messages: AgentMessage[]
         +isStreaming: boolean
-        +streamingMessage?: AgentMessage
+        +streamingMessage: AgentMessage
         +pendingToolCalls: ReadonlySet~string~
-        +errorMessage?: string
+        +errorMessage: string
     }
 
     class MutableAgentState {
-        +tools (copy-on-assign)
-        +messages (copy-on-assign)
+        +tools : copy-on-assign
+        +messages : copy-on-assign
     }
     AgentState <|.. MutableAgentState
 
     class PendingMessageQueue {
         -items: AgentMessage[]
-        -mode: "all" | "one-at-a-time"
+        -mode: QueueMode
         +enqueue(m) void
         +drain() AgentMessage[]
     }
@@ -1286,18 +1286,18 @@ classDiagram
 
     class StreamFn {
         <<type>>
-        (model, context, options?) AssistantMessageEventStream
+        +call(model, context, options) AssistantMessageEventStream
     }
     Agent ..> StreamFn : calls
 
-    class AgentTool~TParams, TDetails~ {
+    class AgentTool {
         <<interface>>
         +name: string
         +label: string
         +description: string
         +parameters: TParams
-        +prepareArguments?(args) TParams
-        +execute(id, params, signal?, cb?) Promise~AgentToolResult~
+        +prepareArguments(args) TParams
+        +execute(id, params, signal, cb) Promise~AgentToolResult~
     }
     class PiAiTool {
         <<from pi-ai>>
@@ -1307,16 +1307,25 @@ classDiagram
 
     class AgentEvent {
         <<union>>
-        agent_start | agent_end | turn_start | turn_end | message_start | message_update | message_end | tool_execution_start | tool_execution_update | tool_execution_end
+        +kind: AgentEventKind
     }
     Agent ..> AgentEvent : emits
 
     class ProxyMessageEventStream {
-        reconstructs AssistantMessage from proxy deltas
+        +reconstruct() AssistantMessage
     }
-    class AssistantMessageEventStream
+    class AssistantMessageEventStream {
+        <<abstract>>
+    }
     AssistantMessageEventStream <|-- ProxyMessageEventStream
 ```
+
+> **Note on the diagram (TS-to-UML rendering):**
+> - `AgentTool` is generic in TypeScript: `AgentTool<TParams, TDetails>`. Mermaid `classDiagram` doesn't accept multi-parameter generics in the class name, so it's shown as plain `AgentTool` here.
+> - `PendingMessageQueue.mode` is the string-literal union `"all" | "one-at-a-time"` in TS; rendered as `QueueMode` for diagram safety.
+> - `AgentEvent` is a discriminated union of `agent_start`, `agent_end`, `turn_start`, `turn_end`, `message_start`, `message_update`, `message_end`, `tool_execution_start`, `tool_execution_update`, `tool_execution_end` (`kind` is the discriminant).
+> - `convertToLlm` and `transformContext` are function-valued fields (`(AgentMessage[]) => Message[]` and `(AgentMessage[]) => Promise<AgentMessage[]>`); the diagram shows their type names (`ConvertFn`, `TransformFn`) since attribute lines can't carry call signatures.
+> - `state` is a TS getter; modeled here as a method so Mermaid parses it cleanly.
 
 ### Why composition over inheritance here?
 
