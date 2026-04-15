@@ -31,7 +31,14 @@ export default defineConfig({
                   items: [
                       { label: 'Clean Architecture System Design (Jason)', slug: 'clean-arch/cleanarchitecture-oop-systemdesign-jason' },
                   ],
-              }, 
+              },
+              {
+                  label: 'Software Design',
+                  collapsed: false,
+                  items: [
+                      { label: 'C4 Architecture Approach', slug: 'design/c4-architecture-approach-explained' },
+                  ],
+              },
               {
                   label: 'Reference',
                   collapsed: false,
