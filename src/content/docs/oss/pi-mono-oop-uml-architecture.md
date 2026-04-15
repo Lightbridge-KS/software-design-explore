@@ -31,6 +31,15 @@ description: "pi-mono — OOP & UML System Architecture"
     - [The six mechanisms behind the diagram](#the-six-mechanisms-behind-the-diagram)
     - [What an extension can do](#what-an-extension-can-do)
     - [Security model](#security-model)
+  - [7b. `RpcMode` — headless programmable transport](#7b-rpcmode--headless-programmable-transport)
+    - [Why it exists](#why-it-exists)
+    - [Why strict JSONL (and not, say, JSON-RPC)?](#why-strict-jsonl-and-not-say-json-rpc)
+    - [Command surface (abbreviated)](#command-surface-abbreviated)
+    - [Architecture — where RpcMode sits](#architecture--where-rpcmode-sits)
+    - [End-to-end flow](#end-to-end-flow)
+    - [A minimal protocol trace](#a-minimal-protocol-trace)
+    - [Streaming-behavior contract](#streaming-behavior-contract)
+    - [Typed client for Node consumers](#typed-client-for-node-consumers)
 - [8. Web UI — `pi-web-ui`](#8-web-ui--pi-web-ui)
   - [Class diagram](#class-diagram-4)
   - [Why Lit + abstract `ArtifactElement`?](#why-lit--abstract-artifactelement)
@@ -2268,6 +2277,177 @@ See the 70+ example extensions under `packages/coding-agent/examples/extensions/
 #### Security model
 
 Extensions run in the main process with full Node privileges. The trust model is *same as shell dotfiles*: you only get an extension if you placed its source under your own config directory. There is no sandbox, no permission prompt on install, no signature check. This is a deliberate trade-off for power-user ergonomics — worth knowing before you `curl | sh` somebody else's extension.
+
+---
+
+### 7b. `RpcMode` — headless programmable transport
+
+`RpcMode` is the third sibling of `InteractiveMode` / `PrintMode`. It keeps the entire `AgentSession` alive (persistence, tools, extensions, compaction, OAuth) but replaces the TUI with a **line-delimited JSON protocol over stdin/stdout**. Same brain, no face. Started with `pi --mode rpc`.
+
+Source files (all under `packages/coding-agent/src/modes/rpc/`):
+
+- `rpc-mode.ts:46` — `runRpcMode(runtimeHost)` — entry point; owns the stdin read loop.
+- `rpc-mode.ts:342` — `handleCommand(command)` — the central dispatch switch.
+- `rpc-types.ts:19` — `RpcCommand` discriminated union (all supported commands).
+- `rpc-client.ts:54` — `RpcClient` — reference TypeScript client that spawns the binary and types the protocol for you.
+- `jsonl.ts:10` / `:21` — `serializeJsonLine` + `attachJsonlLineReader` — strict LF-only framing.
+
+#### Why it exists
+
+- **Non-Node integrations.** The only supported way to embed the coding agent from Python, Rust, Go, or any other language. If you're in Node/TS you're told to import `AgentSession` directly instead.
+- **IDE / editor plugins.** A VS Code extension, Neovim plugin, or JetBrains IDE spawns `pi --mode rpc` as a child process. The README cites [openclaw/openclaw](https://github.com/openclaw/openclaw) as a real-world example.
+- **Custom UIs.** A web dashboard or desktop shell that wants its own rendering but the agent's tool loop, sessions, and extensions.
+- **Automation & testing.** Scripted multi-turn conversations using `steer` / `follow_up` to drive scenarios, then `get_messages` or `export_html` to assert outcomes.
+
+#### Why strict JSONL (and not, say, JSON-RPC)?
+
+RpcMode uses LF-only framing on purpose. The `jsonl.ts` reader exists because Node's built-in `readline` also splits on `U+2028` / `U+2029` — valid characters inside JSON strings — which would corrupt payloads silently. Clients in other languages must split records on `\n` alone and tolerate an optional `\r`. The simple framing keeps cross-language clients trivial to write.
+
+#### Command surface (abbreviated)
+
+All 25+ commands live in the `RpcCommand` union at `rpc-types.ts:19`. They cluster into three buckets:
+
+1. **Turn control** — `prompt`, `steer` (inject mid-turn), `follow_up` (queue for after), `abort`, `new_session`, `fork`, `switch_session`.
+2. **Runtime config** — `set_model`, `cycle_model`, `set_thinking_level`, `set_steering_mode`, `set_auto_compaction`, `set_auto_retry`, `compact`.
+3. **Introspection** — `get_state`, `get_messages`, `get_available_models`, `get_session_stats`, `get_commands`, `get_last_assistant_text`, `export_html`.
+
+Responses carry the optional request `id` back for correlation; `AgentEvent`s (the same union `InteractiveMode` renders to the TUI) stream asynchronously alongside.
+
+#### Architecture — where RpcMode sits
+
+```mermaid
+classDiagram
+    direction TB
+
+    class AgentSession {
+        <<from pi-coding-agent>>
+    }
+
+    class InteractiveMode
+    class PrintMode
+    class RpcMode {
+        runRpcMode(runtimeHost) Promise~never~
+        -handleCommand(cmd: RpcCommand) RpcResponse
+    }
+    InteractiveMode o-- AgentSession
+    PrintMode o-- AgentSession
+    RpcMode o-- AgentSession
+
+    class RpcCommand {
+        <<union, 25+ variants>>
+        prompt | steer | follow_up | abort | new_session | fork | switch_session | set_model | cycle_model | set_thinking_level | set_steering_mode | set_auto_compaction | set_auto_retry | compact | get_state | get_messages | get_available_models | get_session_stats | get_commands | get_last_assistant_text | export_html | bash | abort_bash | set_session_name
+    }
+    class RpcResponse {
+        +id?: string
+        +type: "response"
+        +command: string
+        +success: boolean
+        +data?: any
+    }
+    class RpcEvent {
+        +type: "event"
+        +event: AgentEvent
+    }
+
+    RpcMode ..> RpcCommand : reads from stdin
+    RpcMode ..> RpcResponse : writes to stdout
+    RpcMode ..> RpcEvent : writes to stdout
+
+    class JsonlFraming {
+        <<jsonl.ts>>
+        serializeJsonLine(v) string
+        attachJsonlLineReader(stream, onLine) Unsubscribe
+    }
+    RpcMode *-- JsonlFraming
+
+    class RpcClient {
+        <<reference TS client>>
+        -child: ChildProcess
+        -pending: Map~string, Resolver~
+        +prompt(text, images?) Promise~void~
+        +steer(text) Promise~void~
+        +setModel(p, id) Promise~Model~
+        +onEvent(cb) Unsubscribe
+    }
+    RpcClient ..> RpcMode : spawns + pipes JSON
+```
+
+#### End-to-end flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client<br/>(any language)
+    participant SI as stdin (JSONL)
+    participant R as runRpcMode<br/>(rpc-mode.ts:46)
+    participant H as handleCommand<br/>(rpc-mode.ts:342)
+    participant AS as AgentSession
+    participant SO as stdout (JSONL)
+
+    C->>SI: {"id":"r1","type":"set_model","provider":"anthropic","modelId":"claude-sonnet-4-5"}
+    SI->>R: attachJsonlLineReader yields line
+    R->>H: handleCommand({type:"set_model",...})
+    H->>AS: sessionManager.setModel(...)
+    AS-->>H: Model
+    H-->>R: {id:"r1", type:"response", success:true, data:{...}}
+    R->>SO: serializeJsonLine(response) + "\n"
+    SO-->>C: response line
+
+    C->>SI: {"id":"r2","type":"prompt","message":"Refactor utils/math.ts"}
+    SI->>R: line
+    R->>H: handleCommand({type:"prompt",...})
+    H->>AS: prompt(message)
+    H-->>R: {id:"r2", type:"response", success:true}
+    R->>SO: response line
+
+    AS-->>R: AgentEvent.message_update (delta)
+    R->>SO: {type:"event", event:{type:"message_update",...}}
+    AS-->>R: AgentEvent.tool_execution_start (Read)
+    R->>SO: event line
+    AS-->>R: AgentEvent.tool_execution_end
+    R->>SO: event line
+
+    C->>SI: {"type":"steer","message":"Also add JSDoc"}
+    SI->>R: line (mid-stream)
+    R->>H: handleCommand({type:"steer",...})
+    H->>AS: agent.steer(message)
+    H-->>R: response
+    R->>SO: response line
+
+    AS-->>R: AgentEvent.turn_end
+    R->>SO: event line
+```
+
+#### A minimal protocol trace
+
+```jsonl
+→ {"id":"r1","type":"set_model","provider":"anthropic","modelId":"claude-sonnet-4-5"}
+← {"id":"r1","type":"response","command":"set_model","success":true,"data":{…model…}}
+→ {"id":"r2","type":"prompt","message":"Refactor utils/math.ts to pure functions"}
+← {"id":"r2","type":"response","command":"prompt","success":true}
+← {"type":"event","event":{"type":"message_update","delta":"I'll look at the file…"}}
+← {"type":"event","event":{"type":"tool_execution_start","name":"Read","args":{"path":"utils/math.ts"}}}
+← {"type":"event","event":{"type":"tool_execution_end","name":"Read","result":{…}}}
+← {"type":"event","event":{"type":"tool_execution_start","name":"Edit","args":{…}}}
+→ {"type":"steer","message":"Also add JSDoc comments"}
+← {"type":"response","command":"steer","success":true}
+← {"type":"event","event":{"type":"turn_end"}}
+```
+
+#### Streaming-behavior contract
+
+Unlike a plain request/response server, RpcMode has to reason about *when* a second `prompt` lands while the first is still running. The contract (`rpc-types.ts:21`):
+
+- A bare `prompt` command during an active turn **errors**.
+- `prompt` with `streamingBehavior: "steer"` → delivered after the current turn's tool calls finish, before the next LLM call. Equivalent to `Agent.steer()`.
+- `prompt` with `streamingBehavior: "followUp"` → delivered only after the agent becomes idle. Equivalent to `Agent.followUp()`.
+- Extension slash commands (`/my-cmd`) are the escape hatch — they execute immediately even mid-stream because they own their own LLM interaction.
+
+This maps 1:1 onto `Agent.prompt` / `Agent.steer` / `Agent.followUp` from §6 — RpcMode is a thin translation layer, not a second state machine.
+
+#### Typed client for Node consumers
+
+If the client is itself Node/TS, `RpcClient` at `rpc-client.ts:54` spawns the binary, owns the JSONL framing, correlates `id`s through a `Map<string, Resolver>`, and exposes typed methods (`client.prompt(...)`, `client.setModel(...)`, `client.onEvent(cb)`). Cross-language clients must reimplement this ~500-line shim in their language of choice — the protocol is small enough that doing so is straightforward.
 
 ---
 
