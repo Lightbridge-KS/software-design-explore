@@ -40,6 +40,13 @@ export default defineConfig({
                   ],
               },
               {
+                label: "Automation",
+                collapsed: false,
+                items: [
+                    { label: 'Autoresearch (Karpathy)', slug: 'automation/autoresearch-karpathy' },
+                ]
+              },
+              {
                   label: 'Reference',
                   collapsed: false,
                   autogenerate: { directory: 'reference' },
