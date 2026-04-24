@@ -21,6 +21,7 @@ description: "pi-mono — OOP & UML System Architecture"
   - [Stub Code Example (TS)](#stub-code-example-ts-1)
 - [6. Agent runtime — `pi-agent-core`](#6-agent-runtime--pi-agent-core)
   - [Class diagram](#class-diagram-2)
+  - [Agentic loop — how a turn actually runs](#agentic-loop--how-a-turn-actually-runs)
   - [Why composition over inheritance here?](#why-composition-over-inheritance-here)
   - [Stub Code Example (TS)](#stub-code-example-ts-2)
 - [7. Coding agent — `pi-coding-agent`](#7-coding-agent--pi-coding-agent)
@@ -1336,6 +1337,62 @@ classDiagram
 > - `AgentEvent` is a discriminated union of `agent_start`, `agent_end`, `turn_start`, `turn_end`, `message_start`, `message_update`, `message_end`, `tool_execution_start`, `tool_execution_update`, `tool_execution_end` (`kind` is the discriminant).
 > - `convertToLlm` and `transformContext` are function-valued fields (`(AgentMessage[]) => Message[]` and `(AgentMessage[]) => Promise<AgentMessage[]>`); the diagram shows their type names (`ConvertFn`, `TransformFn`) since attribute lines can't carry call signatures.
 > - `state` is a TS getter; modeled here as a method so Mermaid parses it cleanly.
+
+### Agentic loop — how a turn actually runs
+
+The class diagram explains the *shape* of `Agent`; this loop explains its *behavior*. The important idea is that `Agent` is not just a transcript holder. It is a small orchestration engine that repeatedly builds context, streams a model turn, executes any requested tools, and then decides whether another loop iteration is needed.
+
+```text
+Agent
+ │
+ ┌─────────────────────┼──────────────────────────┐
+ │                     │                          │
+ ▼                     ▼                          ▼
+MutableAgentState   PendingMessageQueue (x2)   Hooks
+ ├ _tools []         steeringQueue             beforeToolCall()
+ ├ _messages []      followUpQueue             afterToolCall()
+ ├ isStreaming                                    transformContext()
+ └ pendingToolCalls                               convertToLlm()
+
+
+Agent Loop (runAgentLoop)
+════════════════════════
+
+do {
+ ┌──────────────────────────────────────────────────┐
+ │ 1. drain steeringQueue → inject into messages   │
+ │ 2. build Context { systemPrompt, messages, tools } │
+ │ 3. transformContext(ctx)                        │
+ │ 4. streamFn(model, ctx)                         │
+ │                                                  │
+ │    ProxyMessageEventStream ◁── intercepts ──┐   │
+ │                                             │   │
+ │    for await (event) emit(AgentEvent)       │   │
+ │    ├── text-delta → accumulate              │   │
+ │    └── done → finalize message              │   │
+ │                                                  │
+ │ 5. tool calls?                                 │
+ │    ┌─────────────────────────────────────┐     │
+ │    │ for each call:                      │     │
+ │    │ beforeToolCall(tool, args)          │     │
+ │    │   null? → skip                      │     │
+ │    │ tool.prepareArguments(args)         │     │
+ │    │ tool.execute(id, params, signal)    │     │
+ │    │ afterToolCall(tool, result)         │     │
+ │    │ push ToolResultMessage              │     │
+ │    └─────────────────────────────────────┘     │
+ │                                                  │
+ │ 6. drain followUpQueue → inject into messages   │
+ └──────────────────────────────────────────────────┘
+} while (followUpQueue.length > 0)
+ │
+ ▼
+resolve idlePromise → waitForIdle() returns
+```
+
+Two queues make the loop more subtle than a simple request/response wrapper. `steeringQueue` injects high-priority messages *before* the next model call, which makes steering a pre-turn intervention. `followUpQueue` injects messages *after* the current turn finishes, and because `runAgentLoop()` uses a `do … while`, any queued follow-up automatically triggers another full iteration.
+
+That design is what makes the runtime feel agentic rather than merely chat-like. A single user prompt can expand into a chain of model calls, tool executions, and injected follow-up messages, while the outer loop remains small and stable. Hooks such as `beforeToolCall()` and `afterToolCall()` add policy and extensibility around tool execution without changing the loop structure itself, and `waitForIdle()` gives callers a clean way to know when the whole cascade has actually drained.
 
 ### Why composition over inheritance here?
 
