@@ -1,3 +1,5 @@
+# Temp file
+_temp/
 # build output
 dist/
 .netlify/
