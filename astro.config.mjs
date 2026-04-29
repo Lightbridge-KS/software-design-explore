@@ -15,13 +15,16 @@ export default defineConfig({
                   collapsed: false,
                   items: [
                       { label: 'MONAI Deploy Informatics Gateway', slug: 'oss/monai-deploy-info-gw-system' },
-                      { label: 'Pi', slug: 'oss/pi-mono-oop-uml-architecture' }
+                      { label: 'Pi', slug: 'oss/pi-mono-oop-uml-architecture' },
+                      { label: 'Warp — System Architecture (C4)', slug: 'oss/warp-system-architecture' },
+                      { label: 'Warp — Desktop App Build', slug: 'oss/warp-desktop-app' }
                   ],
               },
               {
                   label: 'Architecture Patterns',
                   collapsed: false,
                   items: [
+                      { label: "Software Architecture (High level)", slug: 'arch-patterns/software-archietecture-highlv'}, 
                       { label: 'Plugin Architecture: MONAI Deploy Info GW', slug: 'arch-patterns/monai-deploy-plugin-arch' },
                   ],
               },
