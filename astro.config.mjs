@@ -17,7 +17,8 @@ export default defineConfig({
                       { label: 'MONAI Deploy Informatics Gateway', slug: 'oss/monai-deploy-info-gw-system' },
                       { label: 'Pi', slug: 'oss/pi-mono-oop-uml-architecture' },
                       { label: 'Warp — System Architecture (C4)', slug: 'oss/warp-system-architecture' },
-                      { label: 'Warp — Desktop App Build', slug: 'oss/warp-desktop-app' }
+                      { label: 'Warp — Desktop App Build', slug: 'oss/warp-desktop-app' },
+                      { label: 'Unsloth Studio — Architecture (C4 + UML)', slug: 'oss/unsloth-studio-architecture' }
                   ],
               },
               {
