@@ -188,7 +188,7 @@ Producer ─────▶  │ [msg] [msg] [msg]                   │ ──�
 
 Two main shapes:
 
-1. **Queue / point-to-point** — one message is handled by one consumer.
+1. **Queue / work distribution** — one message is handled by one consumer.
 2. **Topic / publish-subscribe** — one event can be observed by many consumers.
 
 Common tools:
@@ -196,12 +196,26 @@ Common tools:
 | Tool | Common shape | Notes |
 |---|---|---|
 | RabbitMQ | Queue / pub-sub | Flexible routing, classic message broker |
-| Kafka | Log / stream | Durable ordered event log, replayable consumers |
+| AWS SQS | Queue | Managed work distribution; one message usually goes to one consumer |
+| Kafka | Log / stream / pub-sub | Durable ordered event log, replayable consumers |
 | NATS | Pub-sub / request-reply | Lightweight, fast, cloud-native messaging |
 | Redis Streams | Stream | Useful when Redis is already present |
-| AWS SQS / SNS | Queue / pub-sub | Managed cloud primitives |
+| MQTT | Pub-sub | Lightweight messaging for IoT/sensor telemetry |
+| AWS SNS | Pub-sub | Managed cloud event broadcast |
 | Google Pub/Sub | Pub-sub | Managed event distribution |
 | Azure Service Bus | Queue / topics | Enterprise messaging on Azure |
+
+In short:
+
+- **Queue / work distribution:** RabbitMQ, AWS SQS — one message → one consumer.
+- **Pub/sub / event broadcast:** Kafka, NATS, Redis Streams, MQTT — one event → many consumers.
+
+Examples:
+
+- order processing
+- AI inference jobs being queued
+- sensor and telemetry pipelines
+- notifying multiple services that a study was uploaded
 
 Async messaging changes the design vocabulary. Instead of asking, “What function do I call?”, you ask:
 
@@ -220,23 +234,27 @@ Use asynchronous messaging when work can happen later, when multiple consumers m
 
 ---
 
-## [7] Batch / File-Based Exchange — Seconds to Hours
+## [7] Batch / File Exchange / Eventual — Seconds to Hours
 
-The loosest form of communication is not a call at all. One system writes data somewhere; another system picks it up later.
+The loosest form of communication is not a call at all. Systems exchange files, rows in a shared database, scheduled dumps, or callbacks that happen later.
 
 ```text
-System A ───── writes file/export ─────▶ Shared location
-                                             │
-                                             ▼
-System B ◀──── reads/import later ──────────┘
+System A ───── writes ─────▶ [S3 bucket / FTP / shared DB]
+                                      │
+                                      ▼
+System B ◀──── reads later ───────────┘
+            on schedule / trigger
 ```
 
 Examples:
 
 - CSV or Excel exports
-- nightly ETL jobs
+- nightly ETL jobs into a data warehouse
 - SFTP drops
 - object-storage handoff through S3, GCS, or Azure Blob
+- dropping a CSV in cloud storage for a partner
+- webhook callbacks: “we'll POST to your URL when ready”
+- DICOM C-STORE batches to a research archive
 - DICOM studies arriving into a watched folder
 - HL7 batch interfaces
 - data lake ingestion
@@ -281,6 +299,23 @@ A practical decision guide:
 | immediate answer from another service | synchronous RPC |
 | resilience, buffering, fan-out, or event workflows | asynchronous messaging |
 | cross-organization exchange or offline workflows | batch/file exchange |
+
+## Quick Mental Model
+
+Where should you draw the boundary?
+
+```text
+Inside one team's code, hot path              → [1] [2]
+Plugin / extensibility                        → [3]
+Co-located performance-critical services      → [4]
+Microservices, request/response               → [5]
+Decoupled, scale-independent events           → [6]
+Cross-org, batch, audit-friendly workflows    → [7]
+```
+
+Each step looser gives you independence — deployment, scaling, language choice, failure isolation, and organizational separation — at the cost of latency, complexity, and consistency guarantees.
+
+Most real systems mix several tiers. A service might use in-process modules internally `[1–2]`, expose a REST API at the edge `[5]`, publish Kafka events behind the scenes `[6]`, and export nightly files to a partner `[7]`.
 
 A simple heuristic:
 
