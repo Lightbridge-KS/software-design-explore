@@ -166,26 +166,45 @@ Use REST/HTTP when you need broad compatibility, public APIs, web/mobile integra
 
 ### gRPC / Protobuf
 
-gRPC uses Protocol Buffers as the interface definition and typically runs over HTTP/2.
+gRPC plus Protocol Buffers is the typed, fast choice for cross-language service contracts. gRPC typically runs over HTTP/2, while Protobuf defines the schema and wire format.
 
 Pros:
 
-- strongly typed service contracts
-- efficient binary payloads
-- generated clients and servers for many languages
+- schema-first: a `.proto` file generates client and server stubs in every major language
+- efficient binary payloads — often around **5–10× smaller** than JSON for comparable data
+- fast serialization/deserialization — often around **2–5× faster** than JSON, depending on payload and runtime
 - good fit for internal service-to-service calls
-- supports unary, server-streaming, client-streaming, and bidirectional streaming
+- HTTP/2 streaming: unary, server-streaming, client-streaming, and bidirectional streaming
 - clearer versioning discipline through `.proto` files
 
 Cons:
 
-- less human-readable on the wire
-- harder to debug with basic browser tools
-- not always convenient for public browser-facing APIs
-- requires schema tooling and generated code
+- harder to debug because the payload is binary
+- needs schema tooling and generated code
+- browser support is awkward compared with plain HTTP/JSON; it usually needs `grpc-web` or a gateway
+- less convenient for public, human-debuggable APIs
 - operationally more specialized than plain HTTP/JSON
 
-Use gRPC when you control both sides, care about performance and type safety, and want a disciplined internal service contract across languages.
+Use gRPC when internal microservices need typed contracts, performance matters, and multiple languages need the same contract.
+
+```text
+┌────────────── shared.proto ──────────────┐
+│ message Study {                          │
+│   string id = 1;                         │
+│   string accession_number = 2;           │
+│   string modality = 3;                   │
+│ }                                        │
+└──────────────────┬───────────────────────┘
+                   │ codegen
+        ┌──────────┼──────────┬───────────┐
+        ▼          ▼          ▼           ▼
+┌────────────┐ ┌────────┐ ┌───────────┐ ┌────────────┐
+│ Python stub│ │ Go stub│ │ Dart stub │ │ C# stub    │
+└────────────┘ └────────┘ └───────────┘ └────────────┘
+        same wire format, same field numbers, same types
+```
+
+The `.proto` file becomes the single source of truth across languages. That is genuinely lovely: **Dependency Inversion at the system level**. Services depend on the shared contract, not on each other's implementation details.
 
 ### Other RPC Styles
 
@@ -198,6 +217,25 @@ Use gRPC when you control both sides, care about performance and type safety, an
 | DICOMweb / DIMSE | radiology imaging systems and PACS workflows |
 
 The important point: at tier `[5]`, languages stop directly calling each other. They exchange **messages over a protocol**.
+
+### Honorable Mentions
+
+Tier `[4]` local IPC across languages is absolutely possible: Unix sockets, named pipes, shared memory, memory-mapped files, stdio protocols, and local TCP. It is just less common as the *primary* application pattern. If components are already on the same host, teams often choose either:
+
+- **full FFI** for maximum speed, or
+- **full network RPC** for clarity and operational familiarity.
+
+The middle ground still matters in a few important places:
+
+- editor ↔ language server, such as LSP over stdio or JSON-RPC
+- Jupyter kernel ↔ frontend, often through ZeroMQ
+- browser ↔ native helper, such as native messaging
+- desktop app ↔ local daemon or privileged helper
+- orchestration process ↔ local inference worker
+
+Tier `[6]` async messaging is heavily polyglot in practice. Brokers do not care whether producers and consumers are written in Python, Go, Rust, Java, C#, or Dart, as long as everyone agrees on the message schema — often Protobuf, Avro, JSON Schema, or CloudEvents.
+
+This is probably the second most common cross-language pattern after REST/gRPC, especially in event-driven architectures and data pipelines.
 
 ---
 
@@ -310,14 +348,28 @@ The surprising lesson is that the fastest option is not the default option. Most
 
 ---
 
-## Quick Decision Guide
+## Practical Mental Model
 
 ```text
-Need native speed in one process?         → FFI
-Need isolation on one machine?            → same-host IPC
-Need immediate request/response?          → REST or gRPC
-Need background work or fan-out?          → queue / pub-sub
-Need cross-org or legacy exchange?        → files / batch / database handoff
+Need maximum speed, willing to share a process?
+  → FFI: Python ↔ Rust/C++ [1–3]
+    rare, surgical, performance-critical
+
+Need typed contracts across internal services?
+  → gRPC + Protobuf [5]
+    common, modern, schema-first
+
+Need to expose APIs to browsers, partners, or humans?
+  → REST + JSON [5]
+    ubiquitous, debuggable, integration-friendly
+
+Need decoupled, scalable, event-driven workflows?
+  → Kafka / RabbitMQ / NATS + Protobuf or Avro [6]
+    common in data pipelines and event-driven systems
+
+Need cross-organization, legacy, or audit-friendly exchange?
+  → files / batch / database handoff [7]
+    slow but honest and operationally recoverable
 ```
 
 A practical heuristic:
@@ -325,6 +377,18 @@ A practical heuristic:
 > Cross language only at the tightest level your problem truly requires.
 
 If the problem is performance-critical numerical code, FFI is worth it. If the problem is ordinary product or service integration, REST/gRPC is usually the right default. If the problem is resilience, scaling, and workflow decoupling, use messaging. If the problem crosses institutions, legacy systems, or audit-heavy environments, batch/file exchange may be the most honest architecture.
+
+In a Radiology AI Unit context, you might see all of these layered together:
+
+```text
+Python inference service
+  └─ wraps C++/CUDA model via FFI [1–3]
+       └─ exposes REST or gRPC API to .NET orchestrator [5]
+            └─ publishes "inference complete" event [6]
+                 └─ consumed by Dart/Flutter notification service
+```
+
+That layering is normal. The trick is to keep each boundary explicit: native ABI, service API, event schema, or file/data contract.
 
 ---
 
