@@ -44,6 +44,13 @@ export default defineConfig({
                   ],
               },
               {
+                  label: 'Communication',
+                  collapsed: false,
+                  items: [
+                      { label: 'Communication Patterns', slug: 'communication/communication-patterns' },
+                  ],
+              },
+              {
                 label: "Automation",
                 collapsed: false,
                 items: [
