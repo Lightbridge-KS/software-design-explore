@@ -48,6 +48,7 @@ export default defineConfig({
                   collapsed: false,
                   items: [
                       { label: 'Communication Patterns', slug: 'communication/communication-patterns' },
+                      { label: 'Cross-Language Communication', slug: 'communication/cross-language-communication' },
                   ],
               },
               {
