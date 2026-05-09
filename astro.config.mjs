@@ -20,6 +20,7 @@ export default defineConfig({
                       { label: 'Warp — Desktop App Build', slug: 'oss/warp-desktop-app' },
                       { label: 'Unsloth Studio — Architecture (C4 + UML)', slug: 'oss/unsloth-studio-architecture' },
                       { label: 'DeepAgents — Architecture', slug: 'oss/deepagents-architect-oop' },
+                      { label: 'Evidently — Architecture', slug: 'soss/evidently-system-oop-architecture' },
                   ],
               },
               {
