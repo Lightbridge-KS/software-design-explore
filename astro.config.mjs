@@ -22,6 +22,7 @@ export default defineConfig({
                       { label: 'Unsloth Studio — Architecture (C4 + UML)', slug: 'oss/unsloth-studio-architecture' },
                       { label: 'DeepAgents — Architecture', slug: 'oss/deepagents-architect-oop' },
                       { label: 'Evidently — Architecture', slug: 'oss/evidently-system-oop-architecture' },
+                      { label: 'Segmentation Models PyTorch — Architecture', slug: 'oss/smp-architecture-oop' },
                       { label: 'FLIP — Architecture', slug: 'oss/flip-architecture-oop' },
                       { label: 'FLIP — OMOP DB', slug: 'oss/flip-omop-db-architecture' },
                   ],
