@@ -23,6 +23,7 @@ export default defineConfig({
                       { label: 'DeepAgents — Architecture', slug: 'oss/deepagents-architect-oop' },
                       { label: 'Evidently — Architecture', slug: 'oss/evidently-system-oop-architecture' },
                       { label: 'Segmentation Models PyTorch — Architecture', slug: 'oss/smp-architecture-oop' },
+                      { label: 'MarkItDown — Architecture', slug: 'oss/markitdown-architecture-oop' },
                       { label: 'FLIP — Architecture', slug: 'oss/flip-architecture-oop' },
                       { label: 'FLIP — OMOP DB', slug: 'oss/flip-omop-db-architecture' },
                   ],
