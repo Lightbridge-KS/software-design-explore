@@ -67,6 +67,13 @@ export default defineConfig({
                 ]
               },
               {
+                label: "Agents System",
+                collapsed: false,
+                items: [
+                    { label: 'Agent Script', slug: 'agentic/agent-scripts-system-architecture' },
+                ]
+              },
+              {
                   label: 'Reference',
                   collapsed: false,
                   autogenerate: { directory: 'reference' },
