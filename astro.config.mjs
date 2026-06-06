@@ -27,6 +27,7 @@ export default defineConfig({
                       { label: 'MarkItDown — Architecture', slug: 'oss/markitdown-architecture-oop' },
                       { label: 'FLIP — Architecture', slug: 'oss/flip-architecture-oop' },
                       { label: 'FLIP — OMOP DB', slug: 'oss/flip-omop-db-architecture' },
+                      { label: 'ClickClack — Architecture', slug: 'oss/clickclack-architecture'}
                   ],
               },
               {
