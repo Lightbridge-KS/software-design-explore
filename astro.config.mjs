@@ -31,6 +31,13 @@ export default defineConfig({
                   ],
               },
               {
+                  label: 'OSS Package Example',
+                  collapsed: false,
+                  items: [
+                      { label: "fs (R-Pkg)", slug: 'pkg/fs-rpkg-architecture'}
+                  ],
+              },
+              {
                   label: 'Architecture Patterns',
                   collapsed: false,
                   items: [
