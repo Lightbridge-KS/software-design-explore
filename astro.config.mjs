@@ -34,7 +34,8 @@ export default defineConfig({
                   label: 'OSS Package Example',
                   collapsed: false,
                   items: [
-                      { label: "fs (R-Pkg)", slug: 'pkg/fs-rpkg-architecture'}
+                      { label: "fs (R-Pkg)", slug: 'pkg/fs-rpkg-architecture'},
+                      { label: "TorchIO", slug: 'pkg/torchio_architecture'},
                   ],
               },
               {
