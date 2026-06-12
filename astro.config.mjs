@@ -24,6 +24,13 @@ export default defineConfig({
                   ],
               },
               {
+                  label: 'Code Design',
+                  collapsed: false,
+                  items: [
+                      { label: 'Fluent & Chainable Design', slug: 'concepts/codedesign/fluent-interface-chainable.md' }
+                  ],
+              },
+              {
                   label: 'Case Studies',
                   collapsed: false,
                   items: [
