@@ -3,7 +3,7 @@ title: "Warp — How the Desktop App Is Built"
 description: Companion to the Warp C4 tour — the rendering stack (wgpu, winit, custom UI runtime), per-OS native bridges, and the cargo-build-to-installer packaging pipeline.
 ---
 
-> Companion to [Warp — System Architecture (C4 Tour)](/oss/warp-system-architecture). This doc answers two practical questions:
+> Companion to [Warp — System Architecture (C4 Tour)](/case-studies/apps/warp-system). This doc answers two practical questions:
 > **(1)** *What stack draws the pixels and talks to the OS?* and
 > **(2)** *How does a `cargo build` turn into a `.app` / `.exe` / `.AppImage` your users can install?*
 

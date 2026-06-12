@@ -11,81 +11,72 @@ export default defineConfig({
           social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Lightbridge-KS/software-design-explore' }],
           sidebar: [
               {
-                  label: 'OSS Examples',
+                  label: 'Concepts',
                   collapsed: false,
                   items: [
-                      { label: 'MONAI Deploy Informatics Gateway', slug: 'oss/monai-deploy-info-gw-system' },
-                      { label: 'MONAI — Architecture', slug: 'oss/monai-system-oop-architecture' },
-                      { label: 'Codex — System Architecture', slug: 'oss/codex-system-architecture' },
-                      { label: 'Pi', slug: 'oss/pi-mono-oop-uml-architecture' },
-                      { label: 'Warp — System Architecture (C4)', slug: 'oss/warp-system-architecture' },
-                      { label: 'Warp — Desktop App Build', slug: 'oss/warp-desktop-app' },
-                      { label: 'Unsloth Studio — Architecture (C4 + UML)', slug: 'oss/unsloth-studio-architecture' },
-                      { label: 'DeepAgents — Architecture', slug: 'oss/deepagents-architect-oop' },
-                      { label: 'Evidently — Architecture', slug: 'oss/evidently-system-oop-architecture' },
-                      { label: 'Segmentation Models PyTorch — Architecture', slug: 'oss/smp-architecture-oop' },
-                      { label: 'MarkItDown — Architecture', slug: 'oss/markitdown-architecture-oop' },
-                      { label: 'FLIP — Architecture', slug: 'oss/flip-architecture-oop' },
-                      { label: 'FLIP — OMOP DB', slug: 'oss/flip-omop-db-architecture' },
-                      { label: 'ClickClack — Architecture', slug: 'oss/clickclack-architecture'}
+                      { label: 'Architecture Patterns', slug: 'concepts/architecture/architecture-patterns' },
+                      { label: 'C4 Model', slug: 'concepts/architecture/c4-model' },
+                      { label: 'Microkernel / Plugin Architecture', slug: 'concepts/architecture/microkernel-plugin-architecture' },
+                      { label: 'Clean Architecture', slug: 'concepts/clean-architecture/clean-architecture-jason' },
+                      { label: 'Communication Patterns', slug: 'concepts/communication/communication-patterns' },
+                      { label: 'Cross-Language Communication', slug: 'concepts/communication/cross-language-communication' },
+                      { label: 'Autoresearch', slug: 'concepts/automation/autoresearch-karpathy' },
                   ],
               },
               {
-                  label: 'OSS Package Example',
+                  label: 'Case Studies',
                   collapsed: false,
                   items: [
-                      { label: "fs (R-Pkg)", slug: 'pkg/fs-rpkg-architecture'},
-                      { label: "TorchIO", slug: 'pkg/torchio_architecture'},
-                      { label: "fo-dicom", slug: 'pkg/fodicom-architecture'},
+                      {
+                          label: 'Apps',
+                          items: [
+                              { label: 'ClickClack', slug: 'case-studies/apps/clickclack' },
+                              { label: 'Unsloth Studio', slug: 'case-studies/apps/unsloth-studio' },
+                              { label: 'Warp System Architecture', slug: 'case-studies/apps/warp-system' },
+                              { label: 'Warp Desktop App', slug: 'case-studies/apps/warp-desktop-app' },
+                          ],
+                      },
+                      {
+                          label: 'Systems & Platforms',
+                          items: [
+                              { label: 'Codex', slug: 'case-studies/systems/codex' },
+                              { label: 'DeepAgents', slug: 'case-studies/systems/deepagents' },
+                              { label: 'Evidently', slug: 'case-studies/systems/evidently' },
+                              { label: 'FLIP', slug: 'case-studies/systems/flip' },
+                              { label: 'FLIP OMOP DB', slug: 'case-studies/systems/flip-omop-db' },
+                              { label: 'MONAI Deploy Informatics Gateway', slug: 'case-studies/systems/monai-deploy-informatics-gateway' },
+                              { label: 'pi-mono', slug: 'case-studies/systems/pi-mono' },
+                          ],
+                      },
+                      {
+                          label: 'Libraries & Packages',
+                          items: [
+                              { label: 'MONAI', slug: 'case-studies/libraries/monai' },
+                              { label: 'TorchIO', slug: 'case-studies/libraries/torchio' },
+                              { label: 'fo-dicom', slug: 'case-studies/libraries/fodicom' },
+                              { label: 'Segmentation Models PyTorch', slug: 'case-studies/libraries/segmentation-models-pytorch' },
+                              { label: 'MarkItDown', slug: 'case-studies/libraries/markitdown' },
+                              { label: 'fs R package', slug: 'case-studies/libraries/fs-rpkg' },
+                          ],
+                      },
+                      {
+                          label: 'Patterns in the Wild',
+                          items: [
+                              { label: 'MONAI Deploy Plugin Architecture', slug: 'case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture' },
+                          ],
+                      },
                   ],
               },
               {
-                  label: 'Architecture Patterns',
+                  label: 'Agentic Systems',
                   collapsed: false,
                   items: [
-                      { label: "Software Architecture (High level)", slug: 'arch-patterns/software-archietecture-highlv'}, 
-                      { label: 'Plugin Architecture: MONAI Deploy Info GW', slug: 'arch-patterns/monai-deploy-plugin-arch' },
+                      { label: 'agent-scripts', slug: 'agentic-systems/agent-scripts' },
                   ],
-              },
-			  {
-                  label: '.NET Clean Architecture',
-                  collapsed: false,
-                  items: [
-                      { label: 'Clean Architecture System Design (Jason)', slug: 'clean-arch/cleanarchitecture-oop-systemdesign-jason' },
-                  ],
-              },
-              {
-                  label: 'Software Design',
-                  collapsed: false,
-                  items: [
-                      { label: 'C4 Architecture Approach', slug: 'design/c4-architecture-approach-explained' },
-                  ],
-              },
-              {
-                  label: 'Communication',
-                  collapsed: false,
-                  items: [
-                      { label: 'Communication Patterns', slug: 'communication/communication-patterns' },
-                      { label: 'Cross-Language Communication', slug: 'communication/cross-language-communication' },
-                  ],
-              },
-              {
-                label: "Automation",
-                collapsed: false,
-                items: [
-                    { label: 'Autoresearch (Karpathy)', slug: 'automation/autoresearch-karpathy' },
-                ]
-              },
-              {
-                label: "Agents System",
-                collapsed: false,
-                items: [
-                    { label: 'Agent Script', slug: 'agentic/agent-scripts-system-architecture' },
-                ]
               },
               {
                   label: 'Reference',
-                  collapsed: false,
+                  collapsed: true,
                   autogenerate: { directory: 'reference' },
               },
           ],

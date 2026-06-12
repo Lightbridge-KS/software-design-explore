@@ -649,4 +649,4 @@ Three on-ramps depending on your interest:
 | **The terminal**                          | `WARP.md` "Terminal Model Locking" section → `app/src/terminal/` → `crates/warp_terminal/`           |
 | **The agent**                             | `app/src/ai/mod.rs` → `app/src/ai_assistant/` → `app/src/ai/mcp/` → `crates/ai/`                     |
 
-For the build & packaging side, see **[Warp — How the Desktop App Is Built](/oss/warp-desktop-app)**.
+For the build & packaging side, see **[Warp — How the Desktop App Is Built](/case-studies/apps/warp-desktop-app)**.
