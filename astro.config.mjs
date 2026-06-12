@@ -36,6 +36,7 @@ export default defineConfig({
                   items: [
                       { label: "fs (R-Pkg)", slug: 'pkg/fs-rpkg-architecture'},
                       { label: "TorchIO", slug: 'pkg/torchio_architecture'},
+                      { label: "fo-dicom", slug: 'pkg/fodicom-architecture'},
                   ],
               },
               {
