@@ -27,6 +27,7 @@ export default defineConfig({
                   label: 'Case Studies',
                   collapsed: false,
                   items: [
+                      { label: 'Overview', slug: 'case-studies' },
                       {
                           label: 'Apps',
                           items: [
@@ -53,7 +54,8 @@ export default defineConfig({
                           items: [
                               { label: 'MONAI', slug: 'case-studies/libraries/monai' },
                               { label: 'TorchIO', slug: 'case-studies/libraries/torchio' },
-                              { label: 'fo-dicom', slug: 'case-studies/libraries/fodicom' },
+                              { label: 'fo-dicom (Architect)', slug: 'case-studies/libraries/fodicom' },
+                              { label: 'fo-dicom (UX)', slug: 'case-studies/libraries/fodicom-ux-design' },
                               { label: 'Segmentation Models PyTorch', slug: 'case-studies/libraries/segmentation-models-pytorch' },
                               { label: 'MarkItDown', slug: 'case-studies/libraries/markitdown' },
                               { label: 'fs R package', slug: 'case-studies/libraries/fs-rpkg' },

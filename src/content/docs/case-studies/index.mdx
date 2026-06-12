@@ -1,0 +1,23 @@
+---
+title: Case Studies
+description: Architecture breakdowns of real software systems, apps, libraries, and design patterns in the wild.
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+This section collects architecture studies from real projects. Use it as a reading map: start with the category that matches the kind of system you want to learn from.
+
+<CardGrid>
+	<Card title="Apps" icon="rocket" href="/case-studies/apps/clickclack/">
+		User-facing applications, desktop apps, and full product experiences.
+	</Card>
+	<Card title="Systems & Platforms" icon="setting" href="/case-studies/systems/codex/">
+		Larger systems, agent runtimes, infrastructure-style repos, and platform architecture.
+	</Card>
+	<Card title="Libraries & Packages" icon="package" href="/case-studies/libraries/monai/">
+		Reusable software packages with strong API, extension, and OOP design lessons.
+	</Card>
+	<Card title="Patterns in the Wild" icon="puzzle" href="/case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture/">
+		Focused pattern studies grounded in concrete production code.
+	</Card>
+</CardGrid>
