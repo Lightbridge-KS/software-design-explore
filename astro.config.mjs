@@ -42,6 +42,7 @@ export default defineConfig({
                               { label: 'Unsloth Studio', slug: 'case-studies/apps/unsloth-studio' },
                               { label: 'Warp System Architecture', slug: 'case-studies/apps/warp-system' },
                               { label: 'Warp Desktop App', slug: 'case-studies/apps/warp-desktop-app' },
+                              { label: 'LLM Wiki App', slug: 'case-studies/apps/llm_wiki_architecture' },
                           ],
                       },
                       {
