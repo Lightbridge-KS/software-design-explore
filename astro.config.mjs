@@ -24,6 +24,13 @@ export default defineConfig({
                   ],
               },
               {
+                  label: 'Technique',
+                  collapsed: false,
+                  items: [
+                      { label: 'Refactoring a Monolith', slug: 'techniques/refactor/refactoring-monolith-strategies' }
+                  ],
+              },
+              {
                   label: 'Code Design',
                   collapsed: false,
                   items: [
