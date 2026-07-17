@@ -50,6 +50,7 @@ export default defineConfig({
                               { label: 'Warp System Architecture', slug: 'case-studies/apps/warp-system' },
                               { label: 'Warp Desktop App', slug: 'case-studies/apps/warp-desktop-app' },
                               { label: 'LLM Wiki App', slug: 'case-studies/apps/llm_wiki_architecture' },
+                              { label: 'Plane', slug: 'case-studies/apps/plane_system_oop_architecture' },
                               { label: 'Slicc App (Architecture)', slug: 'case-studies/apps/slicc_system_oop_architecture' },
                               { label: 'Slicc App (Data Model)', slug: 'case-studies/apps/slicc_data_architecture' },
                           ],
