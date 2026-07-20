@@ -65,6 +65,8 @@ export default defineConfig({
                               { label: 'FLIP OMOP DB', slug: 'case-studies/systems/flip-omop-db' },
                               { label: 'MONAI Deploy Informatics Gateway', slug: 'case-studies/systems/monai-deploy-informatics-gateway' },
                               { label: 'pi-mono', slug: 'case-studies/systems/pi-mono' },
+                              { label: 'Pinchy (Architecture)', slug: 'case-studies/systems/pinchy_system_oop_architecture' },
+                              { label: 'Pinchy (Agentic Design)', slug: 'case-studies/systems/pinchy_agentic_architecture' },
                           ],
                       },
                       {
