@@ -60,7 +60,8 @@ export default defineConfig({
                           items: [
                               { label: 'Codex', slug: 'case-studies/systems/codex' },
                               { label: 'DeepAgents', slug: 'case-studies/systems/deepagents' },
-                              { label: 'Evidently', slug: 'case-studies/systems/evidently' },
+                              { label: 'Evidently (Architecture)', slug: 'case-studies/systems/evidently' },
+                              { label: 'Evidently (UX/API)', slug: 'case-studies/systems/evidently_ux_design' },
                               { label: 'FLIP', slug: 'case-studies/systems/flip' },
                               { label: 'FLIP OMOP DB', slug: 'case-studies/systems/flip-omop-db' },
                               { label: 'Kaapana (Architecture)', slug: 'case-studies/systems/kaapana_system_oop_architecture' },
