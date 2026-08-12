@@ -67,6 +67,8 @@ export default defineConfig({
                               { label: 'Kaapana (Architecture)', slug: 'case-studies/systems/kaapana_system_oop_architecture' },
                               { label: 'Kaapana (UX/API)', slug: 'case-studies/systems/kaapana_ux_design' },
                               { label: 'MONAI Deploy Informatics Gateway', slug: 'case-studies/systems/monai-deploy-informatics-gateway' },
+                              { label: 'OpenClaw (Architecture)', slug: 'case-studies/systems/openclaw_system_architecture' },
+                              { label: 'OpenClaw (Channels Integration)', slug: 'case-studies/systems/openclaw_messaging_channels_integration' },
                               { label: 'pi-mono', slug: 'case-studies/systems/pi-mono' },
                               { label: 'Pinchy (Architecture)', slug: 'case-studies/systems/pinchy_system_oop_architecture' },
                               { label: 'Pinchy (Agentic Design)', slug: 'case-studies/systems/pinchy_agentic_architecture' },
