@@ -67,6 +67,8 @@ export default defineConfig({
                               { label: 'FLIP OMOP DB', slug: 'case-studies/systems/flip-omop-db' },
                               { label: 'Kaapana (Architecture)', slug: 'case-studies/systems/kaapana_system_oop_architecture' },
                               { label: 'Kaapana (UX/API)', slug: 'case-studies/systems/kaapana_ux_design' },
+                              { label: 'LibreChat (Architecture)', slug: 'case-studies/systems/librechat_system_oop_architecture' },
+                              { label: 'LibreChat (Agentic Design)', slug: 'case-studies/systems/librechat_agentic_architecture' },
                               { label: 'MONAI Deploy Informatics Gateway', slug: 'case-studies/systems/monai-deploy-informatics-gateway' },
                               { label: 'OpenClaw (Architecture)', slug: 'case-studies/systems/openclaw_system_architecture' },
                               { label: 'OpenClaw (Channels Integration)', slug: 'case-studies/systems/openclaw_messaging_channels_integration' },
