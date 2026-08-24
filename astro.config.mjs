@@ -18,6 +18,7 @@ export default defineConfig({
                       { label: 'C4 Model', slug: 'concepts/architecture/c4-model' },
                       { label: 'Microkernel / Plugin Architecture', slug: 'concepts/architecture/microkernel-plugin-architecture' },
                       { label: 'Self-Modifying Software', slug: 'concepts/architecture/self-modifying-software' },
+                      { label: 'Spatiotemporal Composability', slug: 'concepts/architecture/spatiotemporal-composability' },
                       { label: 'Clean Architecture', slug: 'concepts/clean-architecture/clean-architecture-jason' },
                       { label: 'Communication Patterns', slug: 'concepts/communication/communication-patterns' },
                       { label: 'Cross-Language Communication', slug: 'concepts/communication/cross-language-communication' },
