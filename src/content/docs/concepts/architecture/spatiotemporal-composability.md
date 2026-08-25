@@ -4,7 +4,7 @@ description: "A formal generalization of the plugin / microkernel idea — rever
 ---
 
 > Source: Shi, Zhang, Cui — *A Programming Paradigm for Spatiotemporal Composability* (Peking University / DeepSeek-AI), and its reference implementation [Cordis](https://github.com/cordiverse/cordis) (`4.0.0-rc.8`) · Date: 2026-08-24
-> Prerequisite concepts: [Microkernel / Plugin Architecture](./microkernel-plugin-architecture.md), [Self-Modifying Software](./self-modifying-software.md) · Demo POCs referenced: `plugin-microkernel-app` (clawkit), `inprocess-extension-app` (pistil)
+> Prerequisite concepts: [Microkernel / Plugin Architecture](./microkernel-plugin-architecture.md), [Self-Modifying Software](./self-modifying-software.md) · Runnable POC: [`spatiotemporal-composition-app`](https://github.com/Lightbridge-KS/architecture-poc/tree/main/examples/spatiotemporal-composition-app) (atrium) in `architecture-poc`; contrasted with `plugin-microkernel-app` (clawkit) and `inprocess-extension-app` (pistil)
 
 ## The Core Idea
 
@@ -440,6 +440,12 @@ add replica    : ['+replica', '+api', '+admin'] | http = 'server on pg://replica
 
 Three properties, each visible in one line: activation in dependency order regardless of load order; cascade teardown with the dependency *still readable* during the consumer's cleanup; and full re-activation against a new provider with no code in any component knowing that anything happened.
 
+The sketch grew into a full POC, [`spatiotemporal-composition-app`](https://github.com/Lightbridge-KS/architecture-poc/tree/main/examples/spatiotemporal-composition-app) (package `atrium`, ~500 lines, 28 tests): it adds generator effects with divert at a yield boundary, per-fiber failure that unwinds partial work, isolation realms, and a declarative loader whose reconciliation is confluent — `snapshot(v1 → v2) == snapshot(scratch → v2)` is a test. Its first CLI scenario prints the three lines above character-for-character:
+
+```bash
+uv run app run "load admin" "load api" "load database" "retire database" "load replica"
+```
+
 ## Use Cases
 
 **1. Plugin ecosystems that never restart.** Koishi disables a plugin from its web console and the plugin's effects are withdrawn in place; during development, HMR re-applies edited plugins on save while every other plugin's caches and live connections survive. Plugin authors write no uninstall path. Across 4,000+ independently authored plugins, IM adapters provide platform access, database drivers provide storage, and feature plugins declare both as coeffects — reconfiguring the storage backend re-activates *only* the dependents whose resolution changed.
@@ -504,5 +510,6 @@ And note what composes with what: the paradigm is orthogonal to the *plugins-add
 - [Microkernel / Plugin Architecture](./microkernel-plugin-architecture.md) — the pattern this generalizes; contract design and classic examples.
 - [Self-Modifying Software](./self-modifying-software.md) — the agent-as-author loop that most needs fine-grained temporal composability, and the two POCs contrasted above.
 - [OpenClaw (Architecture)](../../case-studies/systems/openclaw_system_architecture.md) and [pi-mono](../../case-studies/systems/pi-mono.md) — the production systems the POCs distil.
+- [`spatiotemporal-composition-app`](https://github.com/Lightbridge-KS/architecture-poc/tree/main/examples/spatiotemporal-composition-app) — the runnable Python distillation (atrium): read `components/admin.py` → `effect.py` → `context.py` → `fiber.py` in that order; every mechanism in this chapter maps to a file in its README's technique table.
 - Cordis source: `packages/core/src/context.ts` (78 lines) → `fiber.ts` → `reflect.ts` is the entire paradigm; `packages/timer/src/index.ts` is the canonical worked example of effect-tracked resources.
 - Related work worth reading against this chapter: OSGi Declarative Services / iPOJO (availability-reactive components with hand-written deactivate callbacks), Kramer & Magee's *quiescence* for dynamic change, and Nooks / shadow drivers (interposed reclamation at the kernel boundary).
