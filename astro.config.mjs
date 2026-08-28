@@ -60,6 +60,8 @@ export default defineConfig({
                       {
                           label: 'Systems & Platforms',
                           items: [
+                              { label: 'CKAN (Architecture)', slug: 'case-studies/systems/ckan_system_oop_architecture' },
+                              { label: 'CKAN (Data Model)', slug: 'case-studies/systems/ckan_data_architecture' },
                               { label: 'Codex', slug: 'case-studies/systems/codex' },
                               { label: 'DeepAgents', slug: 'case-studies/systems/deepagents' },
                               { label: 'Evidently (Architecture)', slug: 'case-studies/systems/evidently' },
