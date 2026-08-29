@@ -93,6 +93,8 @@ export default defineConfig({
                               { label: 'MarkItDown', slug: 'case-studies/libraries/markitdown' },
                               { label: 'Presidio (Architecture)', slug: 'case-studies/libraries/presidio_system_oop_architecture' },
                               { label: 'Presidio (UX/API)', slug: 'case-studies/libraries/presidio_ux_design' },
+                              { label: 'assistant-ui (Architecture)', slug: 'case-studies/libraries/assistant_ui_system_oop_architecture' },
+                              { label: 'assistant-ui (UX/API)', slug: 'case-studies/libraries/assistant_ui_ux_design' },
                               { label: 'fs R package', slug: 'case-studies/libraries/fs-rpkg' },
                           ],
                       },
