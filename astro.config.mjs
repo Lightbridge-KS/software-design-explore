@@ -55,6 +55,8 @@ export default defineConfig({
                               { label: 'Plane', slug: 'case-studies/apps/plane_system_oop_architecture' },
                               { label: 'Slicc App (Architecture)', slug: 'case-studies/apps/slicc_system_oop_architecture' },
                               { label: 'Slicc App (Data Model)', slug: 'case-studies/apps/slicc_data_architecture' },
+                              { label: 'OpenKnowledge (Architecture)', slug: 'case-studies/apps/open_knowledge_system_oop_architecture' },
+                              { label: 'OpenKnowledge (UX/API)', slug: 'case-studies/apps/open_knowledge_ux_design' },
                           ],
                       },
                       {
