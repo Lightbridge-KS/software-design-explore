@@ -60,6 +60,9 @@ export default defineConfig({
                               { label: '3D Slicer (Architecture)', slug: 'case-studies/apps/slicer_system_oop_architecture' },
                               { label: '3D Slicer (UX/API)', slug: 'case-studies/apps/slicer_ux_design' },
                               { label: '3D Slicer (Data Model)', slug: 'case-studies/apps/slicer_data_architecture' },
+                              { label: 'VS Code (Architecture)', slug: 'case-studies/apps/vscode_system_oop_architecture' },
+                              { label: 'VS Code (UX/API)', slug: 'case-studies/apps/vscode_ux_design' },
+                              { label: 'VS Code (Data Model)', slug: 'case-studies/apps/vscode_data_architecture' },
                           ],
                       },
                       {
@@ -108,6 +111,7 @@ export default defineConfig({
                           items: [
                               { label: 'MONAI Deploy Plugin Architecture', slug: 'case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture' },
                               { label: '3D Slicer Extension Mechanism', slug: 'case-studies/patterns-in-the-wild/slicer-extension-mechanism' },
+                              { label: 'VS Code Extension Mechanism', slug: 'case-studies/patterns-in-the-wild/vscode-extension-mechanism' },
                           ],
                       },
                   ],
