@@ -57,6 +57,9 @@ export default defineConfig({
                               { label: 'Slicc App (Data Model)', slug: 'case-studies/apps/slicc_data_architecture' },
                               { label: 'OpenKnowledge (Architecture)', slug: 'case-studies/apps/open_knowledge_system_oop_architecture' },
                               { label: 'OpenKnowledge (UX/API)', slug: 'case-studies/apps/open_knowledge_ux_design' },
+                              { label: '3D Slicer (Architecture)', slug: 'case-studies/apps/slicer_system_oop_architecture' },
+                              { label: '3D Slicer (UX/API)', slug: 'case-studies/apps/slicer_ux_design' },
+                              { label: '3D Slicer (Data Model)', slug: 'case-studies/apps/slicer_data_architecture' },
                           ],
                       },
                       {
@@ -104,6 +107,7 @@ export default defineConfig({
                           label: 'Patterns in the Wild',
                           items: [
                               { label: 'MONAI Deploy Plugin Architecture', slug: 'case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture' },
+                              { label: '3D Slicer Extension Mechanism', slug: 'case-studies/patterns-in-the-wild/slicer-extension-mechanism' },
                           ],
                       },
                   ],
