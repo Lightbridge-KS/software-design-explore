@@ -18,6 +18,7 @@ export default defineConfig({
                       { label: 'C4 Model', slug: 'concepts/architecture/c4-model' },
                       { label: 'Microkernel / Plugin Architecture', slug: 'concepts/architecture/microkernel-plugin-architecture' },
                       { label: 'Anatomy of a Plugin Mechanism', slug: 'concepts/architecture/plugin-mechanism-anatomy' },
+                      { label: 'The Mutability Ladder', slug: 'concepts/architecture/mutability-ladder' },
                       { label: 'Self-Modifying Software', slug: 'concepts/architecture/self-modifying-software' },
                       { label: 'Spatiotemporal Composability', slug: 'concepts/architecture/spatiotemporal-composability' },
                       { label: 'Clean Architecture', slug: 'concepts/clean-architecture/clean-architecture-jason' },

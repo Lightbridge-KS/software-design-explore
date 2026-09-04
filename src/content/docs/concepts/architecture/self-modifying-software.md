@@ -289,6 +289,7 @@ Guidance, not law:
 
 ## Where to Go Deeper
 
+- [The Mutability Ladder](/concepts/architecture/mutability-ladder/) — the full spectrum this chapter sits at the top of: config → composition → hooks → plugins → extensions, and the rule for choosing the lowest rung that fits.
 - [Microkernel / Plugin Architecture](./microkernel-plugin-architecture.md) — the underlying pattern, contract design, and classic examples.
 - [OpenClaw — System Architecture](../../case-studies/systems/openclaw_system_architecture.md) and [Messaging Channels Integration](../../case-studies/systems/openclaw_messaging_channels_integration.md) — the production microkernel this chapter distills, including the channel plugin contract with ~25 optional adapter slots.
 - [pi-mono](../../case-studies/systems/pi-mono.md) — the full class-level walkthrough of pi, especially §7a on hot-reload extensions.

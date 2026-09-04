@@ -3,7 +3,7 @@ title: "Anatomy of a Plugin Mechanism"
 description: "The design space behind every real plugin system — nine decisions, three archetypes (merged, registered, hosted), distilled from 3D Slicer, VS Code, OpenClaw, and MONAI Deploy."
 ---
 
-> Prerequisite concept: [Microkernel / Plugin Architecture](/concepts/architecture/microkernel-plugin-architecture/) · Sibling: [Self-Modifying Software](/concepts/architecture/self-modifying-software/)
+> Prerequisite concept: [Microkernel / Plugin Architecture](/concepts/architecture/microkernel-plugin-architecture/) · Next: [The Mutability Ladder](/concepts/architecture/mutability-ladder/) (should there be a plugin system at all?) · Sibling: [Self-Modifying Software](/concepts/architecture/self-modifying-software/)
 > Distilled from four case studies: [3D Slicer Extensions](/case-studies/patterns-in-the-wild/slicer-extension-mechanism/) · [VS Code Extensions](/case-studies/patterns-in-the-wild/vscode-extension-mechanism/) · [OpenClaw Channels](/case-studies/systems/openclaw_messaging_channels_integration/) · [MONAI Deploy Informatics Gateway](/case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture/) · Date: 2026-09-04
 
 ## The Core Idea
