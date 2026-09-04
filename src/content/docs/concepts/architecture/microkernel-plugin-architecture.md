@@ -164,3 +164,9 @@ With .NET's `System.Composition` (MEF) or a DI container like `Microsoft.Extensi
 The pattern gives you four things worth naming explicitly. **Openness**: new features arrive without touching the core (Open/Closed Principle at architecture scale). **Isolation**: a buggy plugin can't corrupt the core's internals because it only sees the contract. **Independent evolution**: plugins can be versioned, shipped, and deployed separately. **Testability**: the core is trivial to test with fake `IImageFilter` stubs; each plugin is tested in isolation against the contract.
 
 The cost is the contract itself — once it's public, changing it breaks every plugin. So design the interface carefully and keep it **narrow and stable**. That's the real engineering work in this pattern.
+
+## Going Deeper
+
+This chapter shows the *shape* of the pattern. Real systems must also decide what a plugin declares before it runs, where its code executes, when it loads, how an install takes effect, and how compatibility survives a host upgrade. Those decisions, and the three archetypes they produce (merged, registered, hosted), are the subject of [Anatomy of a Plugin Mechanism](/concepts/architecture/plugin-mechanism-anatomy/).
+
+Case studies of the mechanism in the wild: [3D Slicer Extensions](/case-studies/patterns-in-the-wild/slicer-extension-mechanism/), [VS Code Extensions](/case-studies/patterns-in-the-wild/vscode-extension-mechanism/), [OpenClaw Channels](/case-studies/systems/openclaw_messaging_channels_integration/), [MONAI Deploy Informatics Gateway](/case-studies/patterns-in-the-wild/monai-deploy-plugin-architecture/).
