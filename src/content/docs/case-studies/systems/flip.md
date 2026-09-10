@@ -1,25 +1,17 @@
 ---
-title: "FLIP Architecture"
-description: FLIP Architecture and OOP Guide
+title: "FLIP — System & OOP Architecture"
+description: "A federated learning platform for medical imaging, from C4 context down to class shape: a cloud hub, per-hospital secure enclaves, and an outbound-only task queue that lets the hub coordinate sites it can never call."
 ---
 
-<!--
-    Copyright (c) 2026 Guy's and St Thomas' NHS Foundation Trust & King's College London
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-        http://www.apache.org/licenses/LICENSE-2.0
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
-
-# FLIP Architecture and OOP Guide
+> Source: `github.com/londonaicentre/FLIP` (branch `develop`, commit `b8d91808`) · Reviewed: 2026-09-10 · Mode: Explain · Type: **Application** (multi-service; entry points `flip-api/src/flip_api/main.py`, the three trust FastAPI apps, the Vue SPA, and the `deploy/compose.*.yml` stacks) · Upstream: Apache-2.0 (Guy's and St Thomas' NHS Foundation Trust & King's College London)
+> See also: [Data Architecture](/case-studies/systems/flip_data_architecture/) · [Client Node ↔ Hospital Integration](/case-studies/systems/flip_client_node_integration/) · [OMOP Database Deep-Dive](/case-studies/systems/flip-omop-db/)
 
 This guide explains the FLIP monorepo from the top down. It is intentionally written as an onboarding map: start with
 the C4-style architecture diagrams, then use the folder map and OOP notes to decide where to read code next.
+
+It is the **structure** lens: services, components, classes, and the flows between them. Two sibling documents cover the
+other two angles on the same system — where data rests and how it moves ([Data Architecture](/case-studies/systems/flip_data_architecture/)),
+and what a hospital has to plug in to run a node ([Client Node ↔ Hospital Integration](/case-studies/systems/flip_client_node_integration/)).
 
 The current implementation is service-oriented rather than domain-object-heavy. Most "OOP" in the Python services is
 made of SQLModel/SQLAlchemy entities, Pydantic request/response schemas, settings objects, and a few external gateway

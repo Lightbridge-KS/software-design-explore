@@ -1,15 +1,14 @@
 ---
-title: "FLIP OMOP Database"
-description: FLIP OMOP Database — Shape & Architecture
+title: "FLIP — OMOP Database"
+description: "The one store a hospital must build itself: the OMOP MI-CDM schema behind FLIP cohort queries, table by table, and the single column that joins the clinical world to the imaging one."
 ---
-<!--
-    Copyright (c) 2026 Guy's and St Thomas' NHS Foundation Trust & King's College London
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-        http://www.apache.org/licenses/LICENSE-2.0
--->
 
+> Source: `github.com/londonaicentre/FLIP` (branch `develop`, commit `b8d91808`) · Date: 2026-09-10 · Mode: Explain · Upstream: Apache-2.0 (Guy's and St Thomas' NHS Foundation Trust & King's College London)
+> See also: [System & OOP Architecture](/case-studies/systems/flip/) · [Data Architecture](/case-studies/systems/flip_data_architecture/) · [Client Node ↔ Hospital Integration](/case-studies/systems/flip_client_node_integration/)
+>
+> This document is the **deep-dive on one store**. For the full inventory of every store in the
+> platform (hub Postgres, S3 buckets, XNAT archive, shared volumes, logs) see the Data Architecture
+> doc; for the deployment topologies and the non-OMOP integration surfaces see the Client Node doc.
 
 This is an onboarding map for hospitals (Trusts) that want to connect to the **client side** of FLIP.
 It explains the structure of the local Postgres database each Trust must run, how the rest of the
