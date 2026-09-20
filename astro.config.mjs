@@ -70,6 +70,9 @@ export default defineConfig({
                       {
                           label: 'Systems & Platforms',
                           items: [
+                              { label: 'acpx (Architecture)', slug: 'case-studies/systems/acpx_system_oop_architecture' },
+                              { label: 'acpx (Data Model)', slug: 'case-studies/systems/acpx_data_architecture' },
+                              { label: 'acpx (UX/API)', slug: 'case-studies/systems/acpx_ux_design' },
                               { label: 'CKAN (Architecture)', slug: 'case-studies/systems/ckan_system_oop_architecture' },
                               { label: 'CKAN (Data Model)', slug: 'case-studies/systems/ckan_data_architecture' },
                               { label: 'Codex', slug: 'case-studies/systems/codex' },
