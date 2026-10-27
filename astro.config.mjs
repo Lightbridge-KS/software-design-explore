@@ -25,6 +25,8 @@ export default defineConfig({
                       { label: 'Communication Patterns', slug: 'concepts/communication/communication-patterns' },
                       { label: 'Cross-Language Communication', slug: 'concepts/communication/cross-language-communication' },
                       { label: 'Autoresearch', slug: 'concepts/automation/autoresearch-karpathy' },
+                      { label: 'Reproducible Codebase', slug: 'concepts/reproducibility/reproducible-codebase-practice' },
+                      { label: 'Fixed Value to Configuration', slug: 'concepts/reproducibility/extract-fixed-value-to-configuration' },
                   ],
               },
               {
