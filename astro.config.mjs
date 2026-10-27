@@ -27,6 +27,7 @@ export default defineConfig({
                       { label: 'Autoresearch', slug: 'concepts/automation/autoresearch-karpathy' },
                       { label: 'Reproducible Codebase', slug: 'concepts/reproducibility/reproducible-codebase-practice' },
                       { label: 'Fixed Value to Configuration', slug: 'concepts/reproducibility/extract-fixed-value-to-configuration' },
+                      { label: 'Portable repository memory', slug: 'concepts/reproducibility/portable-repository-memory'}
                   ],
               },
               {
